@@ -40,14 +40,10 @@ class CharonSession(requests.Session):
     #                                   headers=self._api_token_dict,
     #                                   *args, **kwargs))
 
-        self.get = validate_response(functools.partial(self.get,
-                    headers=self._api_token_dict, timeout=3))
-        self.post = validate_response(functools.partial(self.post,
-                    headers=self._api_token_dict, timeout=3))
-        self.put = validate_response(functools.partial(self.put,
-                    headers=self._api_token_dict, timeout=3))
-        self.delete = validate_response(functools.partial(self.delete,
-                    headers=self._api_token_dict, timeout=3))
+        self.get = validate_response(functools.partial(self.get, headers=self._api_token_dict))
+        self.post = validate_response(functools.partial(self.post, headers=self._api_token_dict))
+        self.put = validate_response(functools.partial(self.put, headers=self._api_token_dict))
+        self.delete = validate_response(functools.partial(self.delete, headers=self._api_token_dict))
 
         self._project_params = ("projectid", "name", "status", "pipeline", "bpa")
         self._sample_params = ("sampleid", "status", "received", "qc_status",
@@ -213,7 +209,7 @@ class CharonSession(requests.Session):
 
 
 ## TODO create different CharonError subclasses for different codes (e.g. 400, 404)
-class CharonError(Exception):
+class CharonError(RuntimeError):
     def __init__(self, message, status_code=None, *args, **kwargs):
         self.status_code = status_code
         super(CharonError, self).__init__(message, *args, **kwargs)
